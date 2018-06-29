@@ -10,6 +10,7 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.exceptions.TelegramApiRequestException;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Bot extends TelegramLongPollingBot {
 
@@ -17,6 +18,8 @@ public class Bot extends TelegramLongPollingBot {
     private final static String BOT_TOKEN = "570680109:AAFP1wHK1KAptytbkR4DNG6YKUxoepnc0bg";
 
     private static ArrayList command = new ArrayList<>();
+    private Random random = new Random();
+    private  Weather weather;
 
     public static void main(String[] args) {
         ApiContextInitializer.init();
@@ -76,14 +79,20 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public void onUpdateReceived(Update update) {
+        weather = new Weather();
         Message message = update.getMessage();
         if(message != null && message.hasText()) {
+            sendMsg(message , " тест");
             switch (message.getText()) {
-                case "/help" :
+                case "/help":
                     firstJoin(message);
                     break;
-                case "/gg":
-                    sendMsg(message , "f");
+                case "/random":
+                    sendMsg(message, String.valueOf(random.nextInt(100)));
+                    break;
+                case "/weather" :
+                   sendMsg(message , weather.getWeather());
+                    break;
             }
         }
     }
